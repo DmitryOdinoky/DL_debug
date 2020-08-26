@@ -65,26 +65,20 @@ class Model(nn.Module):
 
 
             self.backbone_model.layer1,
-            nn.Dropout(0.8),
+            #nn.Dropout(0.8),
             self.backbone_model.layer2,
-            nn.Dropout(0.8),
+            #nn.Dropout(0.8),
             self.backbone_model.layer3,
-            nn.Dropout(0.8),
+            #nn.Dropout(0.8),
             self.backbone_model.layer4,
-            nn.Dropout(0.8)
+            #nn.Dropout(0.8)
 
           
         )
 
         self.fc1 = nn.Linear(in_features=self.backbone_model.fc.in_features, out_features=args.classes_amount)
         
-        self.lin_layer1 = nn.Sequential(
-            nn.Linear(in_features=self.backbone_model.fc.in_features,out_features=args.classes_amount),
-            nn.Dropout(0.8),
-            nn.BatchNorm1d(num_features=args.classes_amount),
-            nn.ReLU()
 
-        )
         
 
 
@@ -94,7 +88,7 @@ class Model(nn.Module):
         out = self.features.forward(x)
         out = F.adaptive_avg_pool2d(out, output_size=(1,1))
         out = out.view(out.size(0), -1)
-        out = self.lin_layer1.forward(out)
+        out = self.fc1.forward(out)
 
         out = torch.softmax(out, dim=1)
 
